@@ -45,47 +45,50 @@ public class CityServiceTest {
 	@Test
 	public void testCityFound() throws Exception {
 
+		// Test values for city and country and add them to arraylist
 		Country country = new Country("TST","TEST");
 		City city = new City(1, "TestCity","TST","Test District",1000);
-
 		List<City> cities = new ArrayList<>();
 		cities.add(city);
 
-
+		// Three mock services for use in testing
 		given(weatherService.getTempAndTime("TestCity")).willReturn(new TempAndTime(300, 100000,1000));
 		given(cityRepository.findByName("TestCity")).willReturn(cities);
 		given(countryRepository.findByCode("TST")).willReturn(country);
 
-
+		// Get returned values
  		CityInfo returned = cityService.getCityInfo("TestCity");
  		CityInfo expected = new CityInfo(1, "TestCity","TST","TEST","Test District",1000,80.33,"04:03 AM");
 
+ 		// Assert test
 		assertEquals(expected,returned);
 
 	}
 	
 	@Test 
 	public void  testCityNotFound() {
+		// Test values for city and country and add them to arraylist
 		Country country = new Country("TST","TEST");
 		City city = new City(1, "TestCity","TST","Test District",1000);
-
 		List<City> cities = new ArrayList<>();
 		cities.add(city);
 
-
+		// Three mock services for use in testing
 		given(weatherService.getTempAndTime("TestCity")).willReturn(new TempAndTime(300, 100000,1000));
 		given(cityRepository.findByName("TestCity")).willReturn(cities);
 		given(countryRepository.findByCode("TST")).willReturn(country);
 
-
+		// Get returned values
 		CityInfo returned = cityService.getCityInfo("Random Name of City");
 		CityInfo expected = null;
 
+		// Assert test
 		assertEquals(expected,returned);
 	}
 	
 	@Test 
 	public void  testCityMultiple() {
+		// Test values for city and country and add them to arraylist
 		Country country = new Country("TST","TEST");
 		Country country1 = new Country("TST1","TEST1");
 		Country country2 = new Country("TST2","TEST2");
@@ -99,19 +102,18 @@ public class CityServiceTest {
 		cities.add(city1);
 		cities.add(city2);
 
-
+		// Five mock services for use in testing
 		given(weatherService.getTempAndTime("TestCity")).willReturn(new TempAndTime(300, 100000,1000));
-
 		given(cityRepository.findByName("TestCity")).willReturn(cities);
-
 		given(countryRepository.findByCode("TST")).willReturn(country);
 		given(countryRepository.findByCode("TST1")).willReturn(country1);
 		given(countryRepository.findByCode("TST2")).willReturn(country2);
 
-
+		// Get returned values
 		CityInfo returned = cityService.getCityInfo("TestCity");
 		CityInfo expected = new CityInfo(1, "TestCity","TST","TEST","Test District",1000,80.33,"04:03 AM");
 
+		// Assert test
 		assertEquals(expected,returned);
 	}
 

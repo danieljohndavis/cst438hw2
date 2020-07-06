@@ -53,16 +53,22 @@ public class CityRestControllerTest {
 
     @Test
     public void getCityInfo() throws Exception {
+        // Basic city info for use in service.
         CityInfo cityInfo = new CityInfo(1, "TestCity", "TST", "TEST", "Test District", 1000, 80.33, "04:03 AM");
 
+        // Given for the city info using above.
         given(cityService.getCityInfo("TestCity")).willReturn(cityInfo);
 
+        // Get response from mvc model.
         MockHttpServletResponse response = mvc.perform(get("/api/cities/TestCity")).andReturn().getResponse();
 
+        // Check that status code is as expected.
         assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
 
+        // Convert JSON to object. Had to ass default constructor for this to work.
         CityInfo returned = json.parseObject(response.getContentAsString());
 
+        // Final test.
         assertEquals(cityInfo, returned);
     }
 

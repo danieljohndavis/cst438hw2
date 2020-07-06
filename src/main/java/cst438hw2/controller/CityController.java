@@ -19,11 +19,14 @@ public class CityController {
     @GetMapping("/cities/{city}")
     public String getWeather(@PathVariable("city") String cityName, Model model) {
 
+        // Retrieve information from City Service
         CityInfo info = cityService.getCityInfo(cityName);
 
+        // If no information was returned, send to error template
         if (info == null) {
             return "error";
         } else {
+            // Add CityInfo to model and send to display template
             model.addAttribute(info);
             return "city_info_list";
         }

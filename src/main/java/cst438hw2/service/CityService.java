@@ -30,27 +30,15 @@ public class CityService {
     public CityInfo getCityInfo(String cityName) {
         List<City> tempCity = cityRepository.findByName(cityName);
 
+        // If no cities are returned, return null.
         if (tempCity.size() == 0) return null;
-
         else {
+            // Get Country information by code for first result.
             Country tempCountry = countryRepository.findByCode(tempCity.get(0).getCountryCode());
+            // Get temperature and time information from weather service.
             TempAndTime tempTempAndTime = weatherService.getTempAndTime(cityName);
-            double tempTemp = (double) Math.round(((tempTempAndTime.temp - 273.15) * 9.0 / 5.0 + 32.0) * 100) / 100;
-            String time = fixTimeString(tempTempAndTime);
-            return new CityInfo(tempCity.get(0), tempCountry.getName(), tempTemp, time);
+            // Use new helpers in TempAndTime class to format output from the service.
+            return new CityInfo(tempCity.get(0), tempCountry.getName(), tempTempAndTime.getFahrenheit(), tempTempAndTime.getLocalTime());
         }
-    }
-
-    public String fixTimeString(TempAndTime t) {
-
-        Instant instant = Instant.ofEpochSecond(t.time);
-        ZoneOffset offset = ZoneOffset.ofTotalSeconds(t.timezone);
-
-        OffsetDateTime offsetDate = instant.atOffset(offset);
-
-        String timeFormat = "hh:mm a";
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(timeFormat);
-
-        return offsetDate.format(dtf);
     }
 }

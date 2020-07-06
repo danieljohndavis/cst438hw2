@@ -11,6 +11,7 @@ public class CityInfo {
     double temp;
     String time;
 
+    // Added base constuctor due to requirement in testing architecture.
     public CityInfo() {
         this.id = -1;
         this.name = null;
